@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title> Xapi Dashboard Test </title>
+	<link rel="stylesheet" href="lib/nv.d3.css"></link>
+	<link rel="stylesheet" href="site.css"></link>
+	<script type="text/javascript" src="dist/xapidashboard.min.js"></script>
+	<script type="text/javascript" src="dist/xapicollection.min.js"></script>
+</head>
+
+<body>
+
+	<nav id="nav01"></nav>
+	<div id="main">
+		<h1> Xapi Dashboard Test </h1>
+		<h2> Web Site Main Ingredients: </h2>
+
+		<p> Pages </p>
+		<p> Style Sheets (CSS) </p>
+		<p> Computer Code (JavaScript) </p>
+		<p> Live Data (Files and Databases) </p>
+		<svg width = "100" heigth = "100" id="graphContainer svg"></svg>
+		<footer id="foot01"></footer>
+	</div>
+	<script type="text/javascript">
+		var wrapper = ADL.XAPIWrapper;
+		wrapper.changeConfig({	"endpoint" : 'https://cloud.scorm.com/tc/P19T692CLI/',
+							 	"user": '0uU4m-d6vVdhhtTYkJo',
+							 	"password": 'ENU3Za6vwbOemJRWtqA'});
+		var dash = new ADL.XAPIDashboard();
+
+		window.onload = function(){
+		    // get all statements made in the last two weeks
+		    var query = {'since': new Date(Date.now() - 1000*60*60*24*30).toISOString()};
+		    dash.fetchAllStatements(query, fetchDoneCallback);
+		};
+		function fetchDoneCallback(){
+    		var chart = dash.createBarChart({
+        		container: '#graphContainer svg',
+        		groupBy: 'verb.id',
+        		aggregate: ADL.count(),
+        		customize: function(chart){
+            		chart.xAxis.rotateLabels(45);
+            		chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0]; });
+       			}
+    		});
+    		chart.draw();
+		}
+
+	</script>
+
+	<script src="script.js"></script>
+
+</body>
+</html>
