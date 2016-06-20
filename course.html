@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Course Dashboard </title>
+	<link rel="stylesheet" href="lib/nv.d3.css"></link>
+	<link rel="stylesheet" href="site.css"></link>
+	<script type="text/javascript" src="dist/xapidashboard.min.js"></script>
+	<script type="text/javascript" src="dist/xapicollection.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>	
+	<script type="text/javascript" src="drawCourseChart.js"></script>
+	<script type="text/javascript" src="loadCoursePage.js"></script>
+</head>
+
+<body>
+	<div id="individual_main">
+		<h1 align="center"> Course Stats </h1>
+		<div id="course_left">
+			<h3 align="center" id="title">Average Score</h3>
+			<svg id='courseGraphContainer'></svg>
+		</div>
+		<div id="course_right">
+			<h3>Filters</h3>
+			<div id = 'layout_right'>
+				<p>From:</p>
+				<input type="date" id="from" onchange="readjustDates()">
+				<p>To:</p>
+				<input type="date" id="to" onchange="readjustDates()">
+				<p>Data:</p>
+				<select onchange="drawChart(this.value)" id="select">
+					<option value="avgCourseScore" selected="true"> Average Score</option>
+					<option value="attempts"> Attempts</option>
+					<option value="pass"> Passing</option>
+					<option value="fail"> Failed</option>
+					<option value="logins"> Logins</option>
+				</select>
+			</div>
+		</div>
+
+	</div>
+</body>

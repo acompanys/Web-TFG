@@ -1,9 +1,8 @@
 
 <!DOCTYPE html>
 <html>
-
 <head>
-	<title> Xapi Dashboard Test </title>
+	<title> Dashboard </title>
 	<link rel="stylesheet" href="lib/nv.d3.css"></link>
 	<link rel="stylesheet" href="site.css"></link>
 	<script type="text/javascript" src="dist/xapidashboard.min.js"></script>
@@ -12,24 +11,125 @@
 
 <body>
 
-	<nav id="nav01"></nav>
-	<div id="main">
-		<h1> Xapi Dashboard Test </h1>
-		<h2> Web Site Main Ingredients: </h2>
 
-		<p> Pages </p>
-		<p> Style Sheets (CSS) </p>
-		<p> Computer Code (JavaScript) </p>
-		<p> Live Data (Files and Databases) </p>
-		<svg width = '10' heigth = '100' id='graphContainer'></svg>
-		<footer id="foot01"></footer>
+	<div id="main">
+		<h1 align="center"> VirtualPC Dashboard Page </h1>
+		<div id="left">
+			<h3>Course Stats<img src="group.png" style="width:30px;height:22px;padding-left:5px;"></h3>
+			<h5>Average success rate by game level</h5>
+			<svg id='graphContainer'></svg>
+			<a href="course.html" class="button">More Course Stats</a>
+		</div>
+		<div id="right">
+			<h3> Individual Stats <img src="person.png" style="width:30px;height:22px;padding-left:5px;"></h3>
+			<h5> Level 1 Max Score </h5>
+			<svg id='graphContainer3'></svg>
+			<a href="individual.html" class="button">More Individual Stats</a>
+
+		</div>
 	</div>
+
+	
 	<script type="text/javascript">
+
 		var wrapper = ADL.XAPIWrapper;
-		wrapper.changeConfig({	"endpoint" : 'https://cloud.scorm.com/tc/P19T692CLI/',
-							 	"user": '0uU4m-d6vVdhhtTYkJo',
-							 	"password": 'ENU3Za6vwbOemJRWtqA'});
-		var dash = new ADL.XAPIDashboard();
+		wrapper.changeConfig({	"endpoint" : 'https://cloud.scorm.com/tc/P19T692CLI/sandbox/',
+							 	"user": '8hLCdL7Y01-1PUtt8s8',
+							 	"password": 'Y2S6fM5JSbq5rhRk9fA'});
+		var dash1 = new ADL.XAPIDashboard('#graphContainer');
+		var dash2 = new ADL.XAPIDashboard('#graphContainer3');
+		console.log(new Date(Date.now() - 1000*60*60*24*30).toISOString());
+		var query = {'since': new Date(Date.now() - 1000*60*60*24*30).toISOString()};
+
+		dash1.fetchAllStatements(query, drawChart1);
+		dash2.fetchAllStatements(query, drawChart2);
+		
+		function drawChart1(){
+			var chart1 = dash1.createBarChart({
+				process: function(data, event, opts){
+					data.where("result.score != null").orderBy("object.id");
+					data.groupBy('object.id').average('result.score.scaled').select('group as in, average as out').exec(opts.cb);
+				},
+				customize: function(chart){
+					chart.xAxis.rotateLabels(15);
+		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0]; });
+		            chart.xAxis.axisLabel("Game Level");
+		            chart.forceY([0,1]);
+		            chart.yAxis.axisLabel("Success Rate");
+				}
+			});
+			chart1.draw();
+
+		}
+
+		function drawChart2(){
+			var chart2 = dash2.createBarChart({
+				process: function(data, event, opts){
+					data.where("object.id = 'https://curatr3.com/define/type/level1'").orderBy('actor.mbox');
+					data.groupBy('actor.mbox').max('result.score.scaled').select('group as in, max as out').exec(opts.cb);
+				},
+				customize: function(chart){
+					chart.xAxis.rotateLabels(15);
+		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0].substring(7); });
+		            chart.xAxis.axisLabel("User");
+		            chart.forceY([0,1]);
+		            chart.yAxis.axisLabel("Level 1 Max Score");
+				}
+
+			});
+
+			chart2.draw();
+
+		}
+
+		/*var query = {'since': new Date(Date.now() - 1000*60*60*24*30).toISOString()};
+		dash.fetchAllStatements(query, fetchDoneCallback);
+
+		var dash2 = new ADL.XAPIDashboard();
+		dash2.fetchAllStatements(query, fetchDoneCallback2);
+
+		function fetchDoneCallback(){
+			var chart = dash.createBarChart({
+				container: '#graphContainer',
+				process: function(data,event,opts){
+					data.where("result.score != null").orderBy("object.id");
+					data.groupBy('object.id').average('result.score.scaled').select('group as in, average as out').exec(opts.cb);
+
+				},
+				customize: function(chart){
+					chart.xAxis.rotateLabels(15);
+		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0]; });
+		            chart.xAxis.axisLabel("Game Level");
+		            chart.forceY([0,1]);
+		            chart.yAxis.axisLabel("Success Rate");
+				}
+			});
+			console.log(chart);
+
+			chart.draw();		
+		}
+
+
+
+		function fetchDoneCallback2(){
+			var chart = dash2.createBarChart({
+				container: '#graphContainer3',
+				process: function(data, event, opts){
+					data.where('verb.id = "http://adlnet.gov/expapi/verbs/https:/brindlewaye.com/xAPITerms/verbs/loggedin"');
+					data.groupBy('actor.mbox').count().select('group as in, count as out').exec(opts.cb);
+				},
+				customize: function(chart){
+					chart.xAxis.rotateLabels(15);
+		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0]; });
+		            chart.xAxis.axisLabel("User");
+		            chart.yAxis.axisLabel("Logins");
+				}
+			});
+			chart.draw();
+
+		}
+		
+		/*var dash = new ADL.XAPIDashboard();
 
 		window.onload = function(){
 		    // get all statements made in the last two weeks
@@ -42,16 +142,38 @@
         		groupBy: 'verb.id',
         		aggregate: ADL.count(),
         		customize: function(chart){
-		            chart.xAxis.rotateLabels(45);
+		            chart.xAxis.rotateLabels(15);
 		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0]; });
         		}
+
         });
     		chart.draw();
-		}
+
+    		var chart2 = dash.createChart("barChart",{
+        		container: '#graphContainer2',
+        		groupBy: 'object.id',
+        		aggregate: ADL.count(),
+        		customize: function(chart){
+		            chart.xAxis.rotateLabels(15);
+		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0]; });
+        		},	
+        		smoothTransition: true
+        	
+        });
+    		chart2.draw();
+
+    		var chart3 = dash.createChart("barChart",{
+        		container: '#graphContainer3',
+        		groupBy: 'actor.mbox',
+        		aggregate: ADL.count(),
+        		customize: function(chart){
+		            chart.xAxis.rotateLabels(15);
+		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0]; });        		}
+        	
+        });
+    		chart3.draw();
+		}*/
 
 	</script>
-
-	<script src="script.js"></script>
-
 </body>
 </html>

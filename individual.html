@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Users Dashboard </title>
+	<link rel="stylesheet" href="lib/nv.d3.css"></link>
+	<link rel="stylesheet" href="site.css"></link>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="dist/xapidashboard.min.js"></script>
+	<script type="text/javascript" src="dist/xapicollection.min.js"></script>
+	<script type="text/javascript" src="drawIndividualChart.js"></script>	
+	<script type="text/javascript" src="loadPage.js"></script>
+</head>
+<body>
+	<div id="individual_main">
+		<h1 align="center"> Users Stats </h1>
+		<div id="individual_left">
+			<h3 align="center" id="title">Average Score</h3>
+			<svg id='individualGraphContainer'></svg>
+		</div>
+		<div id="individual_right">
+			<h3>Filters</h3>
+			<div id = 'layout_right'>
+				<p>From:</p>
+				<input type="date" id="from" onchange="readjustDates()">
+				<p>To:</p>
+				<input type="date" id="to" onchange="readjustDates()">
+				<p>Data:</p>
+				<select onchange="drawChart(this.value)" id="select">
+					<option value="avgScore" selected="true"> Average Score</option>
+					<option value="avgScore1"> Average Score Level 1</option>
+					<option value="avgScore2"> Average Score Level 2</option>
+					<option value="avgScore3"> Average Score Level 3</option>
+					<option value="nlogs"> N. of logins</option>
+					<option value="attempts">Total Attempts</option>
+					<option value="attempts1">Level 1 Attempts</option>
+					<option value="attempts2">Level 2 Attempts</option>
+					<option value="attempts3">Level 3 Attempts</option>
+				</select>
+			</div>
+		</div>
+
+	</div>
+</body>
