@@ -30,8 +30,8 @@ function loadPage(){
 	today = yyyy + '-' + mm +'-' + dd;
 	oneMonthAgo = yyyyoma + '-' + oma + '-' + dd;
 
-	$('#to').attr('value', today);
-	$('#from').attr('value', oneMonthAgo);
+	document.getElementById('to').value = today;
+	document.getElementById('from').value = oneMonthAgo;
 
 	drawChart("nlogs");
 }
