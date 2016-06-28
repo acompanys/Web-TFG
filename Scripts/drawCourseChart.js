@@ -18,11 +18,11 @@ function drawChart(chart){
 			break;
 		case "pass":
 			drawPass(dash);
-			text = "Number of Passing People";
+			text = "Students that Succeeded";
 			break;
 		case "fail":
 			drawFail(dash);
-			text = "Number of Failing People";
+			text = "Students that Failed";
 			break;
 		case "logins":
 			drawLogins(dash);
@@ -52,14 +52,14 @@ function drawCourseAvgScore(dash){
 			container: '#courseGraphContainer',
 			process: function(data, event, opts){
 				data.where("verb.id = 'http://adlnet.gov/expapi/verbs/passed' or verb.id = 'http://adlnet.gov/expapi/verbs/failed'").orderBy('object.id');
-				data.groupBy('object.id').average('result.score.scaled').select('group as in, average as out').exec(opts.cb);
+				data.groupBy('object.id').average('result.score.raw').select('group as in, average as out').exec(opts.cb);
 
 			},
 			customize: function(chart){
 				chart.xAxis.rotateLabels(15);
 		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0]; });
 		            chart.xAxis.axisLabel("Game Level");
-		            chart.forceY([0,1])
+		            chart.forceY([0,100])
 		            chart.yAxis.axisLabel("Average Score");
 			}
 		});
@@ -82,7 +82,7 @@ function drawCourseAttempts(dash){
 		var chart = dash.createBarChart({
 			container: '#courseGraphContainer',
 			process: function(data, event, opts){
-				data.where("verb.id = 'http://adlnet.gov/expapi/verbs/passed' or verb.id = 'http://adlnet.gov/expapi/verbs/failed'").orderBy('object.id');
+				data.where("verb.id = 'http://adlnet.gov/expapi/verbs/attempted'").orderBy('object.id');
 				data.groupBy('object.id').count().select('group as in, count as out').exec(opts.cb);
 
 			},

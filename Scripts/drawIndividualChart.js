@@ -26,7 +26,7 @@ function drawChart(chart){
 			break;
 		case "nlogs":
 			drawNlogsChart(dash);
-			text = "Number of User Logins";
+			text = "Number of Logins";
 			break;
 		case "attempts":
 			drawAttemptsChart(dash);
@@ -66,15 +66,15 @@ function drawAvgScoreChart(dash){
 		var chart = dash.createBarChart({
 			process: function(data, event, opts){
 				data.where("verb.id = 'http://adlnet.gov/expapi/verbs/passed' or verb.id = 'http://adlnet.gov/expapi/verbs/failed'").orderBy("actor.mbox");
-				data.groupBy('actor.mbox').average('result.score.scaled').select('group as in, average as out').exec(opts.cb);
+				data.groupBy('actor.mbox').average('result.score.raw').select('group as in, average as out').exec(opts.cb);
 
 			},
 			customize: function(chart){
 				chart.xAxis.rotateLabels(15);
 		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0].substring(7); });
-		            chart.xAxis.axisLabel("User");
-		            chart.forceY([0,1]);
-		            chart.yAxis.axisLabel("Average Score (0-1)");
+		            chart.xAxis.axisLabel("Student");
+		            chart.forceY([0,100]);
+		            chart.yAxis.axisLabel("Average Score (0-100)");
 			}
 		});
 		chart.draw();
@@ -95,15 +95,15 @@ function drawAvgScoreLevel(dash, level){
 		var chart = dash.createBarChart({
 			process: function(data, event, opts){
 				data.where("(verb.id = 'http://adlnet.gov/expapi/verbs/passed' or verb.id = 'http://adlnet.gov/expapi/verbs/failed') and object.id = 'https://curatr3.com/define/type/level"+level+"'").orderBy("actor.mbox");
-				data.groupBy('actor.mbox').average('result.score.scaled').select('group as in, average as out').exec(opts.cb);
+				data.groupBy('actor.mbox').average('result.score.raw').select('group as in, average as out').exec(opts.cb);
 
 			},
 			customize: function(chart){
 				chart.xAxis.rotateLabels(15);
 		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0].substring(7); });
-		            chart.xAxis.axisLabel("User");
-		            chart.forceY([0,1]);
-		            chart.yAxis.axisLabel("Average Score Level "+ level +" (0-1)");
+		            chart.xAxis.axisLabel("Student");
+		            chart.forceY([0,100]);
+		            chart.yAxis.axisLabel("Average Score Level "+ level +" (0-100)");
 			}
 		});
 		chart.draw();
@@ -131,7 +131,7 @@ function drawNlogsChart(dash){
 			customize: function(chart){
 				chart.xAxis.rotateLabels(15);
 		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0].substring(7); });
-		            chart.xAxis.axisLabel("User");
+		            chart.xAxis.axisLabel("Student");
 		            chart.yAxis.axisLabel("Number of Logins");
 			}
 		});
@@ -160,7 +160,7 @@ function drawAttemptsChart(dash){
 			customize: function(chart){
 				chart.xAxis.rotateLabels(15);
 		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0].substring(7); });
-		            chart.xAxis.axisLabel("User");
+		            chart.xAxis.axisLabel("Student");
 		            chart.yAxis.axisLabel("Total Levels Attempted");
 			}
 		});
@@ -189,7 +189,7 @@ function drawAttemptsLevel(dash, level){
 			customize: function(chart){
 				chart.xAxis.rotateLabels(15);
 		            chart.xAxis.tickFormat(function(d){ return /[^\/]+$/.exec(d)[0].substring(7); });
-		            chart.xAxis.axisLabel("User");
+		            chart.xAxis.axisLabel("Student");
 		            chart.yAxis.axisLabel("Level " + level +" Attempts");
 			}
 		});

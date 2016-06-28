@@ -33,5 +33,5 @@ function loadPage(){
 	$('#to').attr('value', today);
 	$('#from').attr('value', oneMonthAgo);
 
-	drawChart("avgScore");
+	drawChart("nlogs");
 }

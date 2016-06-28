@@ -12,9 +12,15 @@
 </head>
 <body>
 	<div id="individual_main">
-		<h1 align="center"> Users Stats </h1>
+		<h1 align="center"> 
+			<a href="index.html" class="button">
+				<img src="Static/Images/virtualPC_teacher.png" align="left" style="width:50px;height:90px;">
+			</a>
+			Student Stats <img src="Static/Images/person.png" style="width:40px;height:29px;padding-left:5px;">
+
+		</h1> 
 		<div id="individual_left">
-			<h3 align="center" id="title">Average Score</h3>
+			<h3 align="center" id="title">Number of Logins</h3>
 			<svg id='individualGraphContainer'></svg>
 			<a href="index.html" class="button" text-align="center">Back to Main Page</a>
 		</div>
@@ -27,11 +33,11 @@
 				<input type="date" id="to" onchange="readjustDates()">
 				<p>Data:</p>
 				<select onchange="drawChart(this.value)" id="select">
-					<option value="avgScore" selected="true"> Average Score</option>
+					<option value="nlogs" selected=true> N. of logins</option>
+					<option value="avgScore"> Average Score</option>
 					<option value="avgScore1"> Average Score Level 1</option>
 					<option value="avgScore2"> Average Score Level 2</option>
 					<option value="avgScore3"> Average Score Level 3</option>
-					<option value="nlogs"> N. of logins</option>
 					<option value="attempts">Total Attempts</option>
 					<option value="attempts1">Level 1 Attempts</option>
 					<option value="attempts2">Level 2 Attempts</option>
