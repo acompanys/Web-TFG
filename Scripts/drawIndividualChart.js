@@ -153,7 +153,7 @@ function drawAttemptsChart(dash){
 	function attemptsDoneCallback(){
 		var chart = dash.createBarChart({
 			process: function(data, event, opts){
-				data.where("verb.id = 'http://adlnet.gov/expapi/verbs/passed' or verb.id = 'http://adlnet.gov/expapi/verbs/failed'").orderBy('actor.mbox');
+				data.where("verb.id = 'http://adlnet.gov/expapi/verbs/attempted'").orderBy('actor.mbox');
 				data.groupBy('actor.mbox').count().select('group as in, count as out').exec(opts.cb);
 
 			},
@@ -182,7 +182,8 @@ function drawAttemptsLevel(dash, level){
 	function attemptsLevelDoneCallback(){
 		var chart = dash.createBarChart({
 			process: function(data, event, opts){
-				data.where("(verb.id = 'http://adlnet.gov/expapi/verbs/passed' or verb.id = 'http://adlnet.gov/expapi/verbs/failed') and object.id = 'https://curatr3.com/define/type/level"+level+"'").orderBy('actor.mbox');
+				console.log(data);
+				data.where("verb.id = 'http://adlnet.gov/expapi/verbs/attempted' and object.id = 'https://curatr3.com/define/type/level"+level+"'").orderBy('actor.mbox');
 				data.groupBy('actor.mbox').count().select('group as in, count as out').exec(opts.cb);
 
 			},
